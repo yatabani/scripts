@@ -1,0 +1,44 @@
+#!/bin/bash
+# ---------------------------------------------------
+#  Merges back from a origin remote into current branch
+#  Depends on git
+#
+#  Revision history :
+#    01/02/2022, V1.0 - Creation by Yasir O. Atabani @yatabani
+# ---------------------------------------------------
+
+# -------------------------------------------------------
+#   Validate dependancies
+# -------------------------------------------------------
+
+command -v git >/dev/null 2>&1 || { echo "[Error] git is required"; exit 1; }
+
+# -------------------------------------------------------
+#   Validate parameters
+# -------------------------------------------------------
+
+if [ $# -eq 0 ]
+then
+  echo "Merges back from origin remote into current branch."
+  echo "Parameters are :"
+  echo "  <branch>       Branch name to merge back into"
+  exit
+fi
+
+# -------------------------------------------------------
+#   Assign variables
+# -------------------------------------------------------
+
+TO_BRANCH=$(git branch | grep '*' | awk '{print $2}')
+FO_BRANCH=$1
+
+# -------------------------------------------------------
+#   Execute commands
+# -------------------------------------------------------
+
+echo "Merge back $FO_BRANCH into $TO_BRANCH"
+
+git checkout ${FO_BRANCH}
+git pull origin ${FO_BRANCH}
+git checkout ${TO_BRANCH}
+git merge ${FO_BRANCH}
